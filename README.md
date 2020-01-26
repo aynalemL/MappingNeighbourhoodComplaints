@@ -1,1 +1,2 @@
 # MappingNeighbourhoodCompalints
+Mapping neighborhood complaints: The main purpose of this project is to map the distribution of complaints by neighborhood over time using 311 complaint dataset. The result will be used by real-estate companies, renters and homebuyers as an additional neighborhood quality metrics to make informed decisions.
