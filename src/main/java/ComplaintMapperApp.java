@@ -42,7 +42,7 @@ public class ComplaintMapperApp {
         Class.forName("org.postgresql.Driver");
         complaintByTypeByZipByMonth.write()
                 .format("jdbc")
-                .option("url",args[1])// "jdbc:postgresql://localhost:5432/complaintmapper?user=home&password=1stinsightpw31")//+args[1].trim())// //localhost:5432/testing")
+                .option("url",args[1])// "jdbc:postgresql://localhost:5432/complaintmapper?user=*&password=*")//+args[1].trim())// //localhost:5432/testing")
                 .option("dbtable",args[2])// "ComplaintByZip")//args[2]) //"public.complaintbyzip")
                 .option("user", args[4])
                 .option("password",args[5])
