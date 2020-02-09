@@ -45,6 +45,6 @@ Pipeline
 
 Ingestion:
 
-- The raw data is uploaded and stored on s3. Then converted 
-converted 
+- The raw data is uploaded and stored on s3. Then converted to parquet in order to make the column that is essential for my project. 
+
 
