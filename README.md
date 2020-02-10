@@ -1,10 +1,4 @@
 # MappingNeighbourhoodComplaints
-
-This project is completed during the Insight Data Engineering program (New York, 2020). 
-
-The main purpose of the project is to map the spatial and temporal distribution of neighborhoods complaint by borough, zip code and neighborhood. And using trend analysisto show the changes in the number of complaints over time (2010-todate) for borough and zipcode.
-
-
 This project is completed during the Insight Data Engineering program (New York, 2020). 
 
 The main purpose of the project is to map the spatial and temporal distribution of neighborhoods complaint by borough, zip code, and neighborhood. And using trend analysis to show the changes in the number of complaints between 2010-to-date for the specific borough and zip-code.
