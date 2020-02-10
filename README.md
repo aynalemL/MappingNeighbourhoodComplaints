@@ -1,13 +1,13 @@
 # MappingNeighbourhoodComplaints
 This project is completed during the Insight Data Engineering program (New York, 2020). 
 
-The main purpose of the project is to map the spatial and temporal distribution of neighborhoods complaint by borough, zip code, and neighborhood. And using trend analysis to show the changes in the number of complaints between 2010-to-date for the specific borough and zip-code.
+The main purpose of the project is to map the spatial and temporal distribution of neighborhoods complaint by borough, zip code, and neighborhood. The project analyzed complaints data from 2010-to-date at borough and zip-code level.
 
 
 #Business use cases:
 
 1. To provide renters, homebuyers and real-estate developers an optimized way of learning about the neighborhood in which they are interested. It will serve them as additional information to make an informed decision. It will show them the prevalence of complaints on the specific location over the selected period. 
-2. Provide an API for data scientists and the Department of Buildings for analyzing long term trends of complaints in the specific neighbourhood. with a metric:- Total number, year and month of top complaints, consistent complaint type for a given neighborhood, how is it changing over the year, etc... 
+2. Provide an API for data scientists and the Department of Buildings for analyzing long term trends of complaints by geographic areas with a metrics:- total number, year and month of top complaints, prevalent complaint type for a given neighborhood, how is it changing over time, etc... 
 
 #Data Sources
 
