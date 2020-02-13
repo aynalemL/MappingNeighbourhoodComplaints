@@ -1,0 +1,252 @@
+<head>
+    <!-- Load plotly.js into the DOM -->
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+<div class="width:100%">
+    <table class="width:100%">
+        <tr class="width:100%">
+            <td class="width:75%">
+                <div id='mapDiv' class="width:100%" ><!-- Plotly chart will be drawn inside this DIV --></div>
+            </td>
+            <td class="width:25% top:0">
+                <div id="trend"></div>
+                <label>Complaint Type: </label><select id="complaintType"> </select></br>
+                <label>Zoom Level: </label>
+
+                        <select id="zoomLevel">
+                            <option value="byZip">Zip</option>
+                            <option value="byBrgh">Borough</option>
+                        </select></br>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+<script>
+
+$(document).ready(function() {
+    $.ajax({
+        url: "../byComplaintTypeZipLevel"
+    }).then(function(result) {
+          var data = [{
+             type: "choroplethmapbox", locations: result.keys, z: result.values,
+             geojson: $('#zoomLevel option:selected').text() == 'Borough' ? "boroughnycgeojson.json":"nyc_zip_code_tabulation_areas_polygons_withId.json",
+             text:result.texts,
+             hovertemplate:
+                "%{text}" +
+                "<extra></extra>"
+            }];
+
+           var layout = {mapbox: {center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
+              width: 800, height:800};
+
+           var config = {mapboxAccessToken: "pk.eyJ1IjoiYXluaWJyZSIsImEiOiJjazY0YXh0dGgwYmxtM2xsa3gwajJpcTNoIn0.vrRYYlQjiOZ0Nf6dSrrExw"};
+
+           Plotly.newPlot('mapDiv', data, layout, config).then(function(gd){
+                gd.on('plotly_click', function(d){
+                  var pt = (d.points || [])[0]
+
+
+                  $.ajax({
+                         url: $('#zoomLevel option:selected').text() == "Borough" ? "../trendByTypeForBorough": "../trendByTypeForZip",
+                          data: {
+                             complaintType: $('#complaintType option:selected').text(),
+                             spatialId: pt.location
+                                }
+                        }).then(function (result){plotTrend(result);});
+
+                });
+          });
+    });
+
+    $.ajax({
+            url:"../trendByTypeZipLevel"
+        }).then(function (result){plotTrend(result);});
+
+    $.ajax({
+            url: "../complaintTypes",
+            success: function(result)
+            {
+                helpers.buildDropdown(
+                    result,
+                    $('#complaintType'),
+                    'Select Complaint Type'
+                );
+            }
+        });
+
+
+      $('#complaintType').change(function(){
+        $.ajax({
+
+            url:"../trendByTypeZipLevel",
+             data: {
+                   complaintType: $('#complaintType option:selected').text(),
+                 }
+        }).then(function (result){plotTrend(result);})
+      });
+
+ $('#complaintType').change(function(){
+        $.ajax({
+            url: "../complaintByTypeByZoom",
+            data: {
+                   complaintType: $('#complaintType option:selected').text(),
+                   zoomLevel: $('#zoomLevel option:selected').text(),
+                 },
+            success: function(result){
+               var data = [{
+                type: "choroplethmapbox", locations: result.keys, z: result.values,
+                geojson: $('#zoomLevel option:selected').text() == 'Borough' ? "boroughnycgeojson.json":"nyc_zip_code_tabulation_areas_polygons_withId.json",
+                text:result.texts,
+                hovertemplate:
+                "%{text}" +
+                "<extra></extra>"
+                }];
+
+              var layout = {mapbox: {center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
+                 width: 800, height:800};
+
+               var config = {mapboxAccessToken: "pk.eyJ1IjoiYXluaWJyZSIsImEiOiJjazY0YXh0dGgwYmxtM2xsa3gwajJpcTNoIn0.vrRYYlQjiOZ0Nf6dSrrExw"};
+
+              Plotly.newPlot('mapDiv', data, layout, config).then(gd => {
+                  gd.on('plotly_click', d => {
+                  var pt = (d.points || [])[0]
+
+                  $.ajax({
+                         url:$('#zoomLevel option:selected').text() == "Borough" ? "../trendByTypeForBorough": "../trendByTypeForZip",
+                          data: {
+                             complaintType: $('#complaintType option:selected').text(),
+                             spatialId: pt.location
+                                }
+                        }).then(function (result){plotTrend(result);});
+
+
+                  })
+                });
+            }
+        })
+      });
+
+
+$('#zoomLevel').change(function(){
+        $.ajax({
+            url: "../complaintByTypeByZoom",
+            data: {
+                   zoomLevel: $('#zoomLevel option:selected').text(),
+                   complaintType: $('#complaintType option:selected').text()
+                 },
+            success: function(result){
+               var data = [{
+                type: "choroplethmapbox", locations: result.keys, z: result.values,
+                geojson: $('#zoomLevel option:selected').text() == 'Borough' ? "boroughnycgeojson.json":"nyc_zip_code_tabulation_areas_polygons_withId.json",
+                text:result.texts,
+                hovertemplate:
+                "%{text}" +
+                "<extra></extra>"
+                }];
+
+              var layout = {mapbox: {center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
+                 width: 800, height:800};
+
+               var config = {mapboxAccessToken: "pk.eyJ1IjoiYXluaWJyZSIsImEiOiJjazY0YXh0dGgwYmxtM2xsa3gwajJpcTNoIn0.vrRYYlQjiOZ0Nf6dSrrExw"};
+
+              Plotly.newPlot('mapDiv', data, layout, config).then(gd => {
+                  gd.on('plotly_click', d => {
+                  var pt = (d.points || [])[0]
+
+                  $.ajax({
+                         url:"../trendByTypeForBorough",
+                          data: {
+                             complaintType: $('#complaintType option:selected').text(),
+                             borough: pt.location
+                                }
+                        }).then(function (result){plotTrend(result);});
+
+
+                  })
+                });
+            }
+        })
+      });
+      
+function plotTrend(result){
+    var trace1 = {
+           x: result.keys,
+           y: result.values,
+            mode: "lines",
+           type: 'scatter',
+           line:{color: '#C70039'}
+        };
+
+   var data = [trace1];
+   var layout = {
+           width: 500,
+           height:400,
+           title: {
+               text:'Trend in complaints',
+               font: {
+                 family: 'Courier New, monospace',
+                 size: 24
+               }
+             },
+           xaxis: {
+               title: {
+                 text: 'Time',
+                 font: {
+                   family: 'Courier New, monospace',
+                   size: 18,
+                   color: '#7f7f7f'
+                 }
+               },
+               range: ['2010-01-01','2020-12-31'],
+              type: 'date'
+             },
+            yaxis: {
+               title: {
+                 text: 'Number of Reported Complaints',
+                 font: {
+                   family: 'Courier New, monospace',
+                   size: 18,
+                   color: '#7f7f7f'
+                 }
+                }
+               }
+            };
+   Plotly.newPlot('trend', data, layout);
+
+ }
+
+});
+
+
+
+var helpers =
+{
+    buildDropdown: function(result, dropdown, emptyMessage)
+    {
+        // Remove current options
+        dropdown.html('');
+        // Add the empty option with the empty message
+        dropdown.append('<option value="">' + emptyMessage + '</option>');
+        // Check result isnt empty
+        if(result != '')
+        {
+            // Loop through each of the results and append the option to the dropdown
+            $.each(result, function(k, v) {
+                dropdown.append('<option value="' + v.id + '">' + v.name + '</option>');
+            });
+        }
+    }
+}
+</script>
+
+</body>
