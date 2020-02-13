@@ -36,7 +36,7 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 # Pipeline
-![GitHub Logo](/images/logo.png)
+![GitHub Logo](image/spatial and temporal.jpg)
 
 #Ingestion:
 
