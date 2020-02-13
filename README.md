@@ -36,7 +36,7 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 # Pipeline
-[alt text] https://raw.githubusercontent.com/aynalemL/MappingNeighbourhoodCompalints/develop/Images
+![alt text] https://raw.githubusercontent.com/aynalemL/MappingNeighbourhoodCompalints/develop/Images
 
 
 #Ingestion:
