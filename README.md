@@ -36,7 +36,8 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 # Pipeline
-![GitHub Logo](/Users/home/Desktop/screenshot and ppt image/spatial and temporal.jpg)
+[alt text] https://raw.githubusercontent.com/aynalemL/MappingNeighbourhoodCompalints/develop/Images
+
 
 #Ingestion:
 
