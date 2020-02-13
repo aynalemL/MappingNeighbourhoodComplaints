@@ -39,19 +39,19 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 
-#Ingestion:
+# Ingestion:
 
 - The raw data is uploaded and stored on s3. Then converted to parquet in order to make the column that is essential for my project. 
 
--Processing :
+# Processing :
 Using Spark I cleaned, formated, processed and aggregated Parquet data, and stored the output into Postgres database.
 
-Database:
+# Database:
 I used m5a.large ec2 instance for my database/postgress. 
 
 Install and configure follow this steps:https://blog.insightdatascience.com/simply-install-postgresql-58c1e4ebf252
 
-Web server /UI:
+# Web server /UI:
 
 
 
