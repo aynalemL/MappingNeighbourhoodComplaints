@@ -31,7 +31,7 @@ Clone the Pegasus project to your local computer and install awscli
 $ git clone https://github.com/InsightDataScience/pegasus.git
 $ pip install awscli
 
-Databse/Postgres setup:
+**Databse/Postgres setup:**
 Follow the instruction in  https://blog.insightdatascience.com/simply-install-postgresql-58c1e4ebf252 to download and setup access to it.
 
 
