@@ -1,29 +1,74 @@
-import org.apache.spark.rdd.RDD;
+import org.apache.commons.io.FileUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import utils.CVStoParquetWriter_;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 public class CSVtoParquetWriter {
 
+    static final String regex = "\\d{5}";
+
     public static void main(String[] args) {
-        if(args.length < 2){
-            System.out.println("3 arguments are expected [ inputFilePath, outputFilePath");
-            System.exit(-1);
-        }
-        CSVtoParquetWriter csVtoParquetWriter=new CSVtoParquetWriter();
-       // CVStoParquetWriter csVtoParquetWriter = new CVStoParquetWriter_();
-
-        csVtoParquetWriter.cvsToParquetReadWrite(args[0], args[1]);
+        CSVtoParquetWriter csVtoParquetWriter = new CSVtoParquetWriter();
+        //csVtoParquetWriter.cvstoParquetReadWrite(//"spark://Aynalems-MBP.fios-router.home:7077",
+        //   "/Users/home/MappingNeighbourhoodCompalints-develop/data/Inputd/Input",
+        //   "/Users/home/MappingNeighbourhoodCompalints-develop/data/output/newdata555" );
+        // csVtoParquetWriter.cvstoParquetReadWrite(args [0], args[1],args[2]);
 
     }
-    // grouped.count().withColumnRenamed("count(1)", "counts").write().parquet("output.parquet")
 
-    public static void cvsToParquetReadWrite( String inputFilePath, String outputFilePath){
-        SparkSession spark = SparkSession.builder().config("deploy-mode", "cluster").
-                appName("CVStoParquetConverter").getOrCreate();
+
+    public void cvstoParquetReadWrite(String sparkCluster, String inputFilePath, String outputFilePath){
+
+        SparkSession spark = SparkSession.builder().
+                appName("CVStoParquetConverter").master(sparkCluster).getOrCreate();
+        // spark.sparkContext().addJar("/Users/home/MappingNeighbourhoodCompalints-develop/spark-data-process/target/spark-data-process-1.0-SNAPSHOT.jar");
+        // Read csv file and convert it to parquet  and cleaning and data validation
+
+
         Dataset<Row> complaintData = spark.read().option("header", true).csv(inputFilePath);
-        // Read csv file and convert it to parquet
-        complaintData.write().option("header",true).parquet(outputFilePath);
+
+
+        Dataset<Row> cleanComplaintData = complaintData.filter("Descriptor <>'TraumaCounseling'").filter("CreatedDate <> Null").
+                filter("Borough<>Null");
+
+        cleanComplaintData.show(100);
+
+        //(col("Descriptor <>'TraumaCounseling'"));
+
+        try {
+            if ( Files.exists(Paths.get(outputFilePath))){
+                FileUtils.deleteDirectory(new File(outputFilePath));
+                Files.delete(Paths.get(outputFilePath));
+            }
+        } catch (NoSuchFileException x) {
+            System.err.format("%s: no such" + " file or directory%n", outputFilePath);
+        } catch (DirectoryNotEmptyException x) {
+            System.err.format("%s not empty%n", outputFilePath);
+        } catch (IOException x) {
+            // File permission problems are caught here.
+            System.err.println(x);
+        }
+
+        cleanComplaintData = complaintData.filter(i->isAValidZipCode(i.getString(8)));
+
+        cleanComplaintData.write().option("header",true).parquet(outputFilePath);
+
     }
+    public static boolean isAValidZipCode(String zip) {
+        if(zip != null){
+            return    Pattern.matches(regex, zip);
+        }else{
+            return false;
+        }
+
+    }
+
 }
