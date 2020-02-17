@@ -1,26 +1,28 @@
 package com.neighborhood.info.mappingcomplaint.data.cache;
 
 import com.neighborhood.info.mappingcomplaint.data.db.BoroughComplaintDao;
-import com.neighborhood.info.mappingcomplaint.data.db.DBClient;
+import com.neighborhood.info.mappingcomplaint.data.db.PostgresConnManager;
 import com.neighborhood.info.mappingcomplaint.data.db.ZipComplaintDao;
 import com.neighborhood.info.mappingcomplaint.model.Complaint;
 import com.neighborhood.info.mappingcomplaint.model.DropDown;
 
+import java.sql.Connection;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataCache {
 
-    static DBClient dbClient;
     static ZipComplaintDao zipDao;
     static BoroughComplaintDao boroughDao;
     static Set<String> complaintTypes;
-
+    private static Connection conn;
     public DataCache(String url, String user, String password) {
-        dbClient = new DBClient(url, user, password);
+        conn= PostgresConnManager.getConnection(url,user,password);
+
 
     }
+
 
     public DataCache() {
 
@@ -32,9 +34,9 @@ public class DataCache {
 
 
     public static void loadCache() {
-        zipDao = new ZipComplaintDao(dbClient);
-        boroughDao = new BoroughComplaintDao(dbClient);
-         complaintTypes = boroughDao.getAllComplaints().stream().collect(Collectors.groupingBy(c->c.getComplaintType())).keySet();
+        zipDao = new ZipComplaintDao(conn);
+        boroughDao = new BoroughComplaintDao(conn);
+        complaintTypes = boroughDao.getAllComplaints().stream().collect(Collectors.groupingBy(c->c.getComplaintType())).keySet();
     }
 
     private static YearMonth createYearMonth(Complaint c) {
@@ -52,11 +54,11 @@ public class DataCache {
 
     public Map<YearMonth, List<Complaint>> fetchComplaintTrendByTypeByBorough(String type, String borough) {
 
-            if (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("Select Complaint Type")) {
-                return boroughDao.getComplaintsForBorough(borough).stream().collect(Collectors.groupingBy(c -> createYearMonth(c)));
-            } else {
-                return boroughDao.getComplaintsForTypeForBorough(type,borough).stream().collect(Collectors.groupingBy(c -> createYearMonth(c)));
-            }
+        if (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("Select Complaint Type")) {
+            return boroughDao.getComplaintsForBorough(borough).stream().collect(Collectors.groupingBy(c -> createYearMonth(c)));
+        } else {
+            return boroughDao.getComplaintsForTypeForBorough(type,borough).stream().collect(Collectors.groupingBy(c -> createYearMonth(c)));
+        }
     }
 
     public Map<YearMonth, List<Complaint>> fetchByComplaintTrendByTypeByZip(String type, String zip) {
