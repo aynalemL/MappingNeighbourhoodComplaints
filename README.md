@@ -36,7 +36,7 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 # Pipeline
-![Project Pipeline](Image/Screen Shot 2020-02-15 at 8.37.26 PM.png)
+![Project Pipeline]("Image/Screen Shot 2020-02-15 at 8.37.26 PM.png")
 
 
 
