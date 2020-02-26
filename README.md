@@ -43,17 +43,24 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 
+
+
 # Ingestion:
+
 
 - The raw/CSV data is uploaded and stored on **S3**. Then converted to **Parquet** in order to make the column that is essential for my project easily retrievable. 
 
 # Processing :
 Using Spark I cleaned,performed data validation, formated, processed, aggregated and grouped Parquet data, and stored the output into Postgres database.
 
+
+
+
 # Database:
 I used m5a.large ec2 instance for my database/postgress. 
 
 Install and configure follow this steps:https://blog.insightdatascience.com/simply-install-postgresql-58c1e4ebf252
+
 
 # WebSite/Front End:
 
@@ -61,6 +68,8 @@ Install and configure follow this step: git clone https://github.com/spring-guid
 
 # Running Mapping Neighbourhood Complaints: 
 spark-submit --executor-memory 6g  --class ComplaintMapperApp --master spark://MAsterURL InputFilePath OutPutFilePath jdbc:postgresql:EC2 instance IP:port/DatabaseName Table Name TableName User password
+
+
 
 
 
