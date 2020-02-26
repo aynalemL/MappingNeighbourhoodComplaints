@@ -24,6 +24,8 @@
                             <option value="byZip">Zip</option>
                             <option value="byBrgh">Borough</option>
                         </select></br>
+                       <label>Search By Zip: </label> <input type="text" id="zip" placeholder="Enter Zip">
+                        <input type="submit" id="searchZip" value="Search"></input> </br>
             </td>
         </tr>
     </table>
@@ -46,7 +48,7 @@ $(document).ready(function() {
                 "<extra></extra>"
             }];
 
-           var layout = {mapbox: {center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
+           var layout = {mapbox: {title: "search your dream neighborhood!",style: "dark",center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
               width: 800, height:800};
 
            var config = {mapboxAccessToken: "pk.eyJ1IjoiYXluaWJyZSIsImEiOiJjazY0YXh0dGgwYmxtM2xsa3gwajJpcTNoIn0.vrRYYlQjiOZ0Nf6dSrrExw"};
@@ -112,7 +114,7 @@ $(document).ready(function() {
                 "<extra></extra>"
                 }];
 
-              var layout = {mapbox: {center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
+              var layout = {mapbox: {style: "dark",center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
                  width: 800, height:800};
 
                var config = {mapboxAccessToken: "pk.eyJ1IjoiYXluaWJyZSIsImEiOiJjazY0YXh0dGgwYmxtM2xsa3gwajJpcTNoIn0.vrRYYlQjiOZ0Nf6dSrrExw"};
@@ -154,7 +156,7 @@ $('#zoomLevel').change(function(){
                 "<extra></extra>"
                 }];
 
-              var layout = {mapbox: {center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
+              var layout = {mapbox: {style: "dark",center: {lon: -73.882912, lat: 40.748161}, zoom: 10},
                  width: 800, height:800};
 
                var config = {mapboxAccessToken: "pk.eyJ1IjoiYXluaWJyZSIsImEiOiJjazY0YXh0dGgwYmxtM2xsa3gwajJpcTNoIn0.vrRYYlQjiOZ0Nf6dSrrExw"};
@@ -164,10 +166,10 @@ $('#zoomLevel').change(function(){
                   var pt = (d.points || [])[0]
 
                   $.ajax({
-                         url:"../trendByTypeForBorough",
+                         url:$('#zoomLevel option:selected').text() == "Borough" ? "../trendByTypeForBorough": "../trendByTypeForZip",
                           data: {
                              complaintType: $('#complaintType option:selected').text(),
-                             borough: pt.location
+                             spatialId: pt.location
                                 }
                         }).then(function (result){plotTrend(result);});
 
@@ -176,6 +178,36 @@ $('#zoomLevel').change(function(){
                 });
             }
         })
+      });
+
+      $('#searchZip').click(function(){
+        $.ajax({
+            url:"../trendByTypeForZip",
+            data:{
+                spatialId:$('#zip')[0].value,
+                complaintType: $('#complaintType option:selected').text()
+                }
+            }).then(function(result){
+                 plotTrend(result);
+                 var layout = {mapbox: {style: "dark",center: {lon: result.centerCoor.lon, lat: result.centerCoor.lat}, zoom: 12},
+                 width: 800, height:800};
+                 Plotly.newPlot('mapDiv', mapDiv.data, layout, mapDiv.config).then(gd => {
+                  gd.on('plotly_click', d => {
+                  var pt = (d.points || [])[0]
+
+                  $.ajax({
+                         url:$('#zoomLevel option:selected').text() == "Borough" ? "../trendByTypeForBorough": "../trendByTypeForZip",
+                          data: {
+                             complaintType: $('#complaintType option:selected').text(),
+                             spatialId: pt.location
+                                }
+                        }).then(function (result){plotTrend(result);});
+
+
+                  })
+                });
+
+            })
       });
       
 function plotTrend(result){
@@ -218,7 +250,8 @@ function plotTrend(result){
                    size: 18,
                    color: '#7f7f7f'
                  }
-                }
+                },
+
                }
             };
    Plotly.newPlot('trend', data, layout);

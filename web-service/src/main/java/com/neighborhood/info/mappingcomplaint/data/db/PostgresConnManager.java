@@ -12,7 +12,7 @@ public class PostgresConnManager {
             if(conn != null) return conn;
 
             Class.forName("org.postgresql.Driver");
-            //   String url = "jdbc:postgresql://localhost:5432/complaintmapper";
+           //  url = "jdbc:postgresql://localhost:5432/complaintmapper";
             Properties props = new Properties();
             props.setProperty("user",user);
             props.setProperty("password",pw);
