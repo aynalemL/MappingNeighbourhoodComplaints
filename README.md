@@ -36,7 +36,7 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 
 
 # Pipeline 
-![Pipeline_Architecture]("Image/Screen%20Shot%202020-02-15%20at%208.37.26%20PM.png")
+![Pipeline_Architecture](Image/Pipeline.png)
 
 
 
