@@ -35,8 +35,8 @@ $ pip install awscli
 Follow the instruction in  https://blog.insightdatascience.com/simply-install-postgresql-58c1e4ebf252 to download and setup access to it.
 
 
-# Pipeline
-![Project Pipeline]("Image/Screen%20Shot%202020-02-15%20at%208.37.26%20PM.png")
+# Pipeline 
+![Pipeline_Architecture]("Image/Screen%20Shot%202020-02-15%20at%208.37.26%20PM.png")
 
 
 
