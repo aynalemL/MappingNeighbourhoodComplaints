@@ -39,7 +39,8 @@ Follow the instruction in  https://blog.insightdatascience.com/simply-install-po
 ![Project_Pipeline](/Image/Screen Shot 2020-02-15 at 8.37.26 PM.png)
 Format: ![Alt Text](url)
 
-
+![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](url)
 
 #Ingestion:
 
