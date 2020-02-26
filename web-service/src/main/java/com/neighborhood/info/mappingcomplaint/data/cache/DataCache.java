@@ -1,11 +1,15 @@
 package com.neighborhood.info.mappingcomplaint.data.cache;
 
+import com.neighborhood.info.mappingcomplaint.data.ZipLatLong;
 import com.neighborhood.info.mappingcomplaint.data.db.BoroughComplaintDao;
 import com.neighborhood.info.mappingcomplaint.data.db.PostgresConnManager;
 import com.neighborhood.info.mappingcomplaint.data.db.ZipComplaintDao;
 import com.neighborhood.info.mappingcomplaint.model.Complaint;
 import com.neighborhood.info.mappingcomplaint.model.DropDown;
+import com.neighborhood.info.mappingcomplaint.model.GeoCoordinate;
 
+import java.net.URI;
+import java.nio.file.*;
 import java.sql.Connection;
 import java.time.YearMonth;
 import java.util.*;
@@ -16,7 +20,9 @@ public class DataCache {
     static ZipComplaintDao zipDao;
     static BoroughComplaintDao boroughDao;
     static Set<String> complaintTypes;
+    static Map<String, GeoCoordinate> geoCoordinateMap = new HashMap<>();
     private static Connection conn;
+
     public DataCache(String url, String user, String password) {
         conn= PostgresConnManager.getConnection(url,user,password);
 
@@ -37,6 +43,7 @@ public class DataCache {
         zipDao = new ZipComplaintDao(conn);
         boroughDao = new BoroughComplaintDao(conn);
         complaintTypes = boroughDao.getAllComplaints().stream().collect(Collectors.groupingBy(c->c.getComplaintType())).keySet();
+        loadGeoCoordinates();
     }
 
     private static YearMonth createYearMonth(Complaint c) {
@@ -94,4 +101,23 @@ public class DataCache {
             return boroughDao.getComplaintsForType(type).stream().filter(c -> c != null && c.getSpatialId() != null && c.getSpatialId().equalsIgnoreCase(borough)).collect(Collectors.groupingBy(c -> createYearMonth(c)));
         }
     }
+    public static void loadGeoCoordinates(){
+        try{
+            Arrays.stream(ZipLatLong.zipCodeLatLon.split("\n")).
+                    skip(1).forEach(i->addToMap(i));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private static void addToMap(String line){
+        String[] strs = line.split(",");
+        String key = strs[0];
+        String latitude = strs[1];
+        String longitude = strs[2];
+        geoCoordinateMap.put(key, new GeoCoordinate(latitude, longitude));
+    }
+    public GeoCoordinate getCoor(String key){
+        return geoCoordinateMap.get(key);
+    }
 }
+
