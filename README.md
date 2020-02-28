@@ -17,7 +17,7 @@ Historical: 311 Service Requests dataset from 2010 to Present (~ 13 GB real data
 
 # Environment Setup
 
-**Manual: 
+**Manual:**
 
 **Prerequisites**
 AWS account
