@@ -17,7 +17,7 @@ public class CSVtoParquetWriter {
 
     public static void main(String[] args) {
         CSVtoParquetWriter csVtoParquetWriter = new CSVtoParquetWriter();
-        //csVtoParquetWriter.cvstoParquetReadWrite(//"spark://Aynalems-MBP.fios-router.home:7077",
+        //csVtoParquetWriter.cvstoParquetReadWrite(//"spark://localhost",
         //   "/Users/home/MappingNeighbourhoodCompalints-develop/data/Inputd/Input",
         //   "/Users/home/MappingNeighbourhoodCompalints-develop/data/output/newdata555" );
         // csVtoParquetWriter.cvstoParquetReadWrite(args [0], args[1],args[2]);
