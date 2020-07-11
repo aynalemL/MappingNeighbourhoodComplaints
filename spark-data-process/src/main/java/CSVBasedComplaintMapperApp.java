@@ -10,7 +10,7 @@ public class CSVBasedComplaintMapperApp {
 
     public static void main(String[] args) {
         CSVBasedComplaintMapperApp t = new CSVBasedComplaintMapperApp();
-        t.readfromCsv("spark://Aynalems-MBP.fios-router.home:7077",
+        t.readfromCsv("spark://localhost",
                 "/Users/home/MappingNeighbourhoodCompalints-develop/data/Inputd/Input");
         // "/Users/home/MappingNeighbourhoodCompalints-develop/data/output/yy" );
         // CsvBasedSCompalintApp.readfromCsv(args [0], args[1],args[2]);
@@ -22,7 +22,7 @@ public class CSVBasedComplaintMapperApp {
 
         SparkSession spark = SparkSession.builder().
                 appName("CSVReader").master(sparkCluster).getOrCreate();
-        // spark.sparkContext().addJar("/Users/home/MappingNeighbourhoodCompalints-develop/spark-data-process/target/spark-data-process-1.0-SNAPSHOT.jar");
+       
         // Read csv file and convert it to parquet  and cleaning and data validation
 
 
